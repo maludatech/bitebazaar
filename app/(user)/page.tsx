@@ -3,11 +3,11 @@
 import Image from "next/image";
 import { IonIcon } from "@ionic/react";
 import { locationOutline, navigateOutline } from "ionicons/icons";
-import HotFoods from "@/components/HotFoods";
-import Products from "@/components/Products";
-import Resturant from "@/components/Resturant";
-import Services from "@/components/Services";
-import Footer from "@/components/Footer";
+import HotFoods from "../components/HotFoods";
+import Products from "../components/Products";
+import Resturant from "../components/Resturant";
+import Services from "../components/Services";
+import Footer from "../components/Footer";
 
 export default function Home() {
   return (

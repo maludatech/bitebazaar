@@ -1,4 +1,4 @@
-import Footer from "@/components/Footer"
+import Footer from "@/app/components/Footer"
 import Image from "next/image"
 
 

@@ -8,7 +8,7 @@ import { closeOutline, reorderThreeOutline } from "ionicons/icons";
 import { faUser, faBurger } from "@fortawesome/free-solid-svg-icons";
 import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
-import app from "@/utils/Firebase";
+import app from "../utils/Firebase";
 
 const Navbar = () => {
   const auth = getAuth(app);

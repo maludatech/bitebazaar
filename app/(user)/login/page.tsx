@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, fetchSignInMethodsForEmail } from 'firebase/auth';
-import app from '@/utils/Firebase';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { Spinner } from '@/components/Spinner';
+import { Spinner } from '@/app/components/Spinner';
+import app from '@/app/utils/Firebase';
 import Link from 'next/link';
 
 const Login = () => {

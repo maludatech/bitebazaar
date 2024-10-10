@@ -1,11 +1,11 @@
 "use client"
 
-import Footer from "@/components/Footer";
-import ProductList from "@/components/ProductList";
+import Footer from "@/app/components/Footer";
+import ProductList from "@/app/components/ProductList";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { getAuth } from "firebase/auth";
-import app from "@/utils/Firebase";
+import app from "@/app/utils/Firebase";
 
 const Menu = () => {
     const auth = getAuth(app);
