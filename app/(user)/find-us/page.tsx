@@ -1,5 +1,5 @@
-import Footer from "@/app/components/Footer";
-import Services from "@/app/components/Services";
+import Footer from "@/components/Footer";
+import Services from "@/components/Services";
 import Link from "next/link";
 
 const FindUS = () => {

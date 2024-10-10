@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
-import { Spinner } from '@/app/components/Spinner';
-import app from '@/app/utils/Firebase';
+import { Spinner } from '@/components/Spinner';
+import app from '@/utils/Firebase';
 import Link from 'next/link';
 
 const Login = () => {
