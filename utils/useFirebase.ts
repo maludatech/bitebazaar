@@ -6,7 +6,7 @@ import {
   createUserWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import app from '@/utils/Firebase';
 import { db } from '@/utils/Firebase';
 
@@ -16,7 +16,7 @@ const auth = getAuth(app);
 interface UserData {
   email: string;
   displayName?: string | null; // Display name might not always be available
-  photoUrl?: string | null;
+  photoURL?: string | null;
   createdAt: Date;
 }
 
