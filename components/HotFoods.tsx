@@ -20,14 +20,14 @@ const HotFoods = () => {
             price: "5,300.00",
         },
         {
-            imageUrl: "/assets/images/hot-food/chicken-shawarma.jpg",
-            foodName: "Chicken Shawarma",
-            price: "5,000.00",
-        },
-        {
             imageUrl: "/assets/images/hot-food/beef-burger.jpg",
             foodName: "Beef Burger",
             price: "7,000.00",
+        },
+        {
+            imageUrl: "/assets/images/hot-food/chicken-shawarma.jpg",
+            foodName: "Chicken Shawarma",
+            price: "5,000.00",
         },
         {
             imageUrl: "/assets/images/hot-food/beef-shawarma.jpg",

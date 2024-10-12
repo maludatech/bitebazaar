@@ -1,29 +1,36 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, reorderThreeOutline } from "ionicons/icons";
-import { faUser, faBurger } from "@fortawesome/free-solid-svg-icons";
-import { useRouter } from "next/navigation";
-import { getAuth } from "firebase/auth";
+import { faUser, faBurger, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import app from "../utils/Firebase";
+import { signOutUser } from "@/utils/useFirebase";
 
 const Navbar = () => {
   const auth = getAuth(app);
-  const user = auth.currentUser;
-  const router = useRouter();
-
+  const [user, setUser] = useState<User | null>(null);
   const [toggleDropDown, setToggleDropDown] = useState<boolean>(false);
 
-  if (user) {
-    console.log("Current User:", user);
-    console.log("User ID:", user.uid);
-    console.log("Email:", user.email);
-  } else {
-    console.log("No user is signed in");
-  }
+  useEffect(() => {
+    // Subscribe to user authentication state changes
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        console.log("Current User:", currentUser);
+        console.log("User ID:", currentUser.uid);
+        console.log("Email:", currentUser.email);
+      } else {
+        console.log("No user is signed in");
+      }
+    });
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  }, [auth]);
 
   return (
     <nav className="bg-primary_color flex flex-col font-rubik w-full fixed top-0 z-50">
@@ -42,14 +49,6 @@ const Navbar = () => {
             <Link href={"/about"} className="text-secondary_color font-medium transition ease-in-out duration-200 hover:underline">ABOUT US</Link>
             <Link href={"/contact"} className="text-secondary_color font-medium transition ease-in-out duration-200 hover:underline">CONTACT</Link>
             <Link href={"/find-us"} className="text-secondary_color font-medium transition ease-in-out duration-200 hover:underline">FIND US</Link>
-            {user && (
-              <button
-                className="flex sm:hidden items-center gap-1 font-bold rounded-2xl p-3 bg-secondary_color text-black hover:opacity-90"
-                onClick={() => console.log("Sign out")}
-              >
-                Sign out
-              </button>
-            )}
           </div>
 
           {/* Mobile Navigation */}
@@ -65,28 +64,30 @@ const Navbar = () => {
                 <Link href={"/about"} className="hover:underline transition ease-in-out duration-300" onClick={() => setToggleDropDown(false)}>ABOUT US</Link>
                 <Link href={"/contact"} className="hover:underline transition ease-in-out duration-300" onClick={() => setToggleDropDown(false)}>CONTACT</Link>
                 <Link href={"/find-us"} className="hover:underline transition ease-in-out duration-300" onClick={() => setToggleDropDown(false)}>FIND US</Link>
-                {!user && (
-                  <Link href={"/login"} className="flex sm:hidden items-center gap-1 font-bold rounded-2xl p-3 bg-secondary_color text-black hover:opacity-90" onClick={()=>setToggleDropDown(false)}>
+                {!user ? (
+                  <Link href={"/login"} className="flex w-fit sm:hidden items-center gap-1 font-bold rounded-lg p-3 px-5 bg-secondary_color text-black hover:opacity-90" onClick={()=>setToggleDropDown(false)}>
                     <FontAwesomeIcon icon={faUser} />
                     Login
                   </Link>
+                ):(
+                  <button className="flex sm:hidden w-fit items-center gap-1 font-bold rounded-lg p-3 px-5 bg-secondary_color text-black hover:opacity-90" onClick={()=>{setToggleDropDown(false); signOutUser()}}>
+                    <FontAwesomeIcon icon={faRightFromBracket} />
+                    Logout
+                  </button>
                 )}
               </div>
-            )}
-            {user && (
-              <button
-                className="dark:bg-white dark:text-black p-3 font-semibold text-lg rounded-lg bg-black text-white hover:bg-white hover:text-black dark:hover:bg-black hover:border-[1px] dark:hover:border-white hover:border-black dark:hover:text-white transition duration-300 ease-in-out"
-                onClick={() => setToggleDropDown(false)}
-              >
-                Sign out
-              </button>
             )}
           </div>
         </div>
 
         {/* Desktop Login Button */}
-        {!user && (
-          <Link href={"/login"} className={`hidden lg:flex items-center gap-1 font-bold rounded-2xl py-1 px-3 bg-secondary_color hover:opacity-90 ${user && "hidden"}`}>
+        {user ? (
+          <button onClick={() => signOutUser()} className={`hidden lg:flex items-center gap-1 font-bold rounded-lg py-1 px-3 bg-secondary_color hover:opacity-90`}>
+            <FontAwesomeIcon icon={faRightFromBracket} />
+            Logout
+          </button>
+        ) : (
+          <Link href={"/login"} className={`hidden lg:flex items-center gap-1 font-bold rounded-lg py-1 px-3 bg-secondary_color hover:opacity-90`}>
             <FontAwesomeIcon icon={faUser} />
             Login
           </Link>

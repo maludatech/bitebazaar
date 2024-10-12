@@ -1,23 +1,18 @@
 "use client";
 
-import { useState } from 'react';
-import { 
-  getAuth, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  fetchSignInMethodsForEmail 
-} from 'firebase/auth';
+import { useEffect, useState } from 'react';
+import { getAuth, fetchSignInMethodsForEmail, onAuthStateChanged, User, SignInMethod } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Spinner } from '@/components/Spinner';
 import app from '@/utils/Firebase';
+import { signInUser, createUser, signInWithGoogle, storeUserData } from '@/utils/useFirebase';
 import Link from 'next/link';
 
 const Login = () => {
+  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -28,22 +23,27 @@ const Login = () => {
 
   const router = useRouter();
   const auth = getAuth(app);
-  const user = auth.currentUser;
 
-  if (user) {
-    router.replace("/menu");
-  }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        router.push('/menu');
+      } else {
+        console.log("No user is signed in");
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
 
   // Handle Google sign-in
   const handleGoogleSignIn = async () => {
-    const provider = new GoogleAuthProvider();
     setIsGoogleSignInLoading(true);
     try {
-      await signInWithPopup(auth, provider);
-      router.push('/menu'); // Redirect after successful login
+      await signInWithGoogle();
+      router.push('/menu');
     } catch (error: any) {
-      // Display the error message
-      setErrorMessage(`Google sign-in failed: ${error.message}`);
+      handleError(error);
     } finally {
       setIsGoogleSignInLoading(false);
     }
@@ -53,44 +53,52 @@ const Login = () => {
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+  
     try {
+      // Fetch sign-in methods for the email
       const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      if (signInMethods.length > 0) {
-        await signInWithEmailAndPassword(auth, email, password);
+      console.log("signinMethods:", signInMethods);
+      
+      if (signInMethods.includes(SignInMethod.GOOGLE)) {
+        // If linked to Google, prompt to sign in with Google
+        setErrorMessage("This email is already linked to a Google account. Please sign in with Google.");
+      } else if (signInMethods.length > 0) {
+        // User exists, attempt to sign in
+        await signInUser(email, password);
         setSuccessMessage("Login successful!");
-        setTimeout(() =>setSuccessMessage(""),3000);
+        router.push('/menu'); // Redirect only after successful sign-in
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        // No sign-in methods found, create a new user
+        const userCredential = await createUser(email, password);
+        await storeUserData(userCredential?.user);
         setSuccessMessage("Account created successfully!");
-        setTimeout(() =>setSuccessMessage(""),3000);
+        router.push('/menu'); // Redirect after account creation
       }
-      router.push('/menu');
     } catch (error: any) {
-      // Check for specific error codes and display user-friendly messages
-      switch (error.code) {
-        case 'auth/invalid-email':
-          setErrorMessage("Invalid email format.");
-          setTimeout(() =>setErrorMessage(""),3000);
-          break;
-        case 'auth/user-not-found':
-          setErrorMessage("No account found with this email.");
-          setTimeout(() =>setErrorMessage(""),3000);
-          break;
-        case 'auth/wrong-password':
-          setErrorMessage("Incorrect password.");
-          setTimeout(() =>setErrorMessage(""),3000);
-          break;
-        case 'auth/email-already-in-use':
-          setErrorMessage("Email is already registered.");
-          setTimeout(() =>setErrorMessage(""),3000);
-          break;
-        default:
-          setErrorMessage(`Authentication error: ${error.message}`);
-          setTimeout(() =>setErrorMessage(""),3000);
-      }
+      handleError(error); // Handle errors
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleError = (error: any) => {
+    const messages: Record<string, string> = {
+      'auth/invalid-email': "Invalid email format.",
+      'auth/user-not-found': "No account found with this email.",
+      'auth/wrong-password': "Incorrect password.",
+      'auth/email-already-in-use': "Email is already registered.",
+      'auth/operation-not-allowed': "Operation not allowed. Please use a different sign-in method.",
+    };
+
+    if (error.code === 'auth/wrong-password') {
+      setErrorMessage("Incorrect password.");
+    } else {
+      setErrorMessage(messages[error.code] || ` ${error.message}`);
+    }
+
+    setTimeout(() => setErrorMessage(""), 3000);
   };
 
   return (
@@ -124,13 +132,13 @@ const Login = () => {
           </div>
           <button 
             type="submit" 
-            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] relative hover:bg-slate-200"
+            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] relative hover:border-primary_color"
           >
             {isLoading ? (
               <Spinner otherStyles={""} />
             ) : (
               <div className="flex items-center justify-center">
-                <IonIcon icon={mailOutline} className="size-5 text-green-700 absolute left-4" />
+                <IonIcon icon={mailOutline} className="size-5 text-primary_color absolute left-4" />
                 <h1 className="mx-auto">Continue with Email</h1>
               </div>
             )}
@@ -141,7 +149,7 @@ const Login = () => {
           <p className="mb-2 font-medium uppercase">or</p>
           <button 
             onClick={handleGoogleSignIn} 
-            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] hover:bg-slate-200"
+            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] hover:border-primary_color"
             disabled={isGoogleSignInLoading}
           >
             {isGoogleSignInLoading ? (
@@ -162,13 +170,13 @@ const Login = () => {
         </div>
 
         {errorMessage && (
-          <p className="w-full p-2 text-sm text-red-500 bg-red-300 border-red-500 border-[1px] rounded-2xl">
+          <p className="w-full p-2 mt-2 text-sm text-red-500 text-center bg-red-300 border-red-500 border-[1px] rounded-2xl">
             {errorMessage}
           </p>
         )}
 
         {successMessage && (
-          <p className="w-full p-2 text-sm text-blue-500 bg-blue-300 border-blue-500 border-[1px] rounded-2xl">
+          <p className="w-full p-2 text-sm mt-2 text-center text-blue-500 bg-blue-300 border-blue-500 border-[1px] rounded-2xl">
             {successMessage}
           </p>
         )}

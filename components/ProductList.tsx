@@ -16,7 +16,7 @@ const ProductList = [
     },
     {
         imageUrl: "/assets/images/shop/desperado.jpg",
-        name: "Desperado (44cl)",
+        name: "Desperado (33cl)",
         price: "1,000"
     },
     {
