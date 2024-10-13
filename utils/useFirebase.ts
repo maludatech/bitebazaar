@@ -6,9 +6,9 @@ import {
   createUserWithEmailAndPassword,
   signOut
 } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc } from 'firebase/firestore';
 import app from '@/utils/Firebase';
-import { db } from '@/utils/Firebase';
+import { datastore } from '@/utils/Firebase';
+import { Datastore } from '@google-cloud/datastore';
 
 const auth = getAuth(app);
 

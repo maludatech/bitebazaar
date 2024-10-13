@@ -1,7 +1,8 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from 'firebase/firestore';
+import { Datastore } from "@google-cloud/datastore";
 
+// Firebase configuration
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
@@ -12,13 +13,14 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID
 };
 
-
 // Initialize Firebase, check if an app already exists
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
 export default app;
 
-// Initialize Firestore
-const db = getFirestore(app);
+// Initialize Datastore client
+const datastore = new Datastore({
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID // Same project ID used in Firebase
+});
 
-export { db };
+export { datastore };
