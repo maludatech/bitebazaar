@@ -40,7 +40,8 @@ const Login = () => {
   const handleGoogleSignIn = async () => {
     setIsGoogleSignInLoading(true);
     try {
-      await signInWithGoogle();
+      const userCredential = await signInWithGoogle();
+      await storeUserData(userCredential?.user); // Ensure user data is stored
       router.push('/menu');
     } catch (error: any) {
       handleError(error);

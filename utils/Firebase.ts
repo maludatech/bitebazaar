@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { Datastore } from "@google-cloud/datastore";
+import { getFirestore } from "firebase/firestore"; // Import Firestore
 
 // Firebase configuration
 const firebaseConfig = {
@@ -16,11 +16,8 @@ const firebaseConfig = {
 // Initialize Firebase, check if an app already exists
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+
+// Initialize Firestore
+export const firestore = getFirestore(app); // Initialize Firestore here
+
 export default app;
-
-// Initialize Datastore client
-const datastore = new Datastore({
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID // Same project ID used in Firebase
-});
-
-export { datastore };

@@ -7,8 +7,8 @@ import {
   signOut
 } from 'firebase/auth';
 import app from '@/utils/Firebase';
-import { datastore } from '@/utils/Firebase';
-import { Datastore } from '@google-cloud/datastore';
+import { firestore } from '@/utils/Firebase'; // Firestore instance
+import { doc, setDoc, getDoc } from "firebase/firestore"; // Firestore methods for document operations
 
 const auth = getAuth(app);
 
@@ -20,16 +20,18 @@ interface UserData {
   createdAt: Date;
 }
 
+// Create a new user and store the data in Firestore
 export const createUser = async (email: string, password: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    await storeUserData(userCredential.user);
+    await storeUserData(userCredential.user); // Store user data in Firestore
     return userCredential;
   } catch (error) {
     handleFirebaseError(error);
   }
 };
 
+// Sign in user with email and password
 export const signInUser = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -39,6 +41,7 @@ export const signInUser = async (email: string, password: string) => {
   }
 };
 
+// Sign in user with Google and store user data in Firestore
 export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {
@@ -50,6 +53,7 @@ export const signInWithGoogle = async () => {
   }
 };
 
+// Sign out user
 export const signOutUser = async () => {
   try {
     await signOut(auth);
@@ -59,39 +63,40 @@ export const signOutUser = async () => {
   }
 };
 
+// Store user data in Firestore
 export const storeUserData = async (user: any) => {
   try {
     if (!user) {
       throw new Error("User data is undefined. Cannot store user data.");
     }
+
+    // Firestore: Use the user's UID as the document ID in the 'users' collection
+    const userRef = doc(firestore, "users", user.uid); // Firestore document reference
     
-    const userData: UserData = {
-      email: user.email,
-      displayName: user.displayName || null,
-      photoURL: user.photoURL || null, // Optionally include photo URL
-      createdAt: new Date(),
-    };
+    const userSnapshot = await getDoc(userRef); // Check if user already exists in Firestore
 
-    const userDocRef = doc(db, 'users', user.uid);
-    const userDoc = await getDoc(userDocRef);
+    if (!userSnapshot.exists()) {
+      const userData: UserData = {
+        email: user.email,
+        displayName: user.displayName || null,
+        photoURL: user.photoURL || null,
+        createdAt: new Date(),
+      };
 
-    // Only create a new document if the user doesn't already exist
-    if (!userDoc.exists()) {
-      await setDoc(userDocRef, userData);
-      console.log("User data stored successfully");
+      await setDoc(userRef, userData); // Save user data to Firestore
+      console.log("User data stored successfully in Firestore");
     } else {
       console.log("User already exists, skipping data storage");
     }
   } catch (error) {
-    console.error("Error storing user data:", error);
+    console.error("Error storing user data in Firestore:", error);
     throw error;
   }
 };
 
 const handleFirebaseError = (error: any) => {
   console.error("Firebase error:", error);
-  
-  // Improve error handling
+
   let errorMessage = "An error occurred, please try again.";
   if (error.code === 'auth/email-already-in-use') {
     errorMessage = "This email address is already in use.";
@@ -101,6 +106,5 @@ const handleFirebaseError = (error: any) => {
     errorMessage = "No user found with this email address.";
   }
 
-  // You can throw an error or display it in your UI
   throw new Error(errorMessage);
 };
