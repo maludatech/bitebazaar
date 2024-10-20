@@ -1,24 +1,23 @@
 "use client"
 
-import Footer from "@/components/Footer";
-import ProductList from "@/components/ProductList";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { getAuth } from "firebase/auth";
-import app from "@/utils/Firebase";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import Footer from "@/components/Footer";
+import ProductList from "@/components/ProductList";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Menu = () => {
-    const auth = getAuth(app);
-    const user = auth.currentUser;
+    const {user} = useAuthContext();
     const router = useRouter();
 
-    if (user) {
-        console.log("Current User:", user);
-        console.log("User ID:", user.uid);
-        console.log("Email:", user.email);
-      } else {
-        console.log("No user is signed in");
-      }
+    useEffect(() => {
+        const isLoggedIn = Cookies.get('isLoggedIn');
+        if (!user && !isLoggedIn) {
+        router.push('/login');
+        }
+    }, [user, router]);
 
   return (
     <div className="pt-20 font-lato">

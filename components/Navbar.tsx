@@ -6,31 +6,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, reorderThreeOutline } from "ionicons/icons";
 import { faUser, faBurger, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import app from "../utils/Firebase";
-import { signOutUser } from "@/utils/useFirebase";
+import { useAuthContext } from "@/context/AuthContext";
 
 const Navbar = () => {
-  const auth = getAuth(app);
-  const [user, setUser] = useState<User | null>(null);
+  const {user, dispatch} = useAuthContext();
   const [toggleDropDown, setToggleDropDown] = useState<boolean>(false);
 
-  useEffect(() => {
-    // Subscribe to user authentication state changes
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        console.log("Current User:", currentUser);
-        console.log("User ID:", currentUser.uid);
-        console.log("Email:", currentUser.email);
-      } else {
-        console.log("No user is signed in");
-      }
-    });
-
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  }, [auth]);
+  const signOutUser =() => {
+    dispatch({ type: "LOGOUT" });
+  };
 
   return (
     <nav className="bg-primary_color flex flex-col font-rubik w-full fixed top-0 z-50">

@@ -17,5 +17,8 @@ body {
 .glassmorphism {
   @apply rounded-xl border border-gray-300 bg-white p-5 backdrop-blur;
 }
+.glassmorphism_login {
+  @apply rounded-xl border border-gray-300 bg-white p-5 py-8 backdrop-blur;
+}
 
 

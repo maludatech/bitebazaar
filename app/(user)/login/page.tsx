@@ -1,18 +1,17 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { getAuth, fetchSignInMethodsForEmail, onAuthStateChanged, User, SignInMethod } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import Image from 'next/image';
+import Cookies from 'js-cookie';
 import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Spinner } from '@/components/Spinner';
-import app from '@/utils/Firebase';
-import { signInUser, createUser, signInWithGoogle, storeUserData } from '@/utils/useFirebase';
-import Link from 'next/link';
+import { useAuthContext } from '@/context/AuthContext';
+
 
 const Login = () => {
-  const [user, setUser] = useState<User | null>(null);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -22,89 +21,47 @@ const Login = () => {
   const [successMessage, setSuccessMessage] = useState<string>("");
 
   const router = useRouter();
-  const auth = getAuth(app);
+  const {user, dispatch} = useAuthContext();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        router.push('/menu');
-      } else {
-        console.log("No user is signed in");
-      }
-    });
-    return () => unsubscribe();
-  }, [auth]);
-
-  // Handle Google sign-in
-  const handleGoogleSignIn = async () => {
-    setIsGoogleSignInLoading(true);
-    try {
-      const userCredential = await signInWithGoogle();
-      await storeUserData(userCredential?.user); // Ensure user data is stored
-      router.push('/menu');
-    } catch (error: any) {
-      handleError(error);
-    } finally {
-      setIsGoogleSignInLoading(false);
+    const isLoggedIn = Cookies.get('isLoggedIn');
+    if (user && isLoggedIn) {
+    router.push('/menu');
     }
-  };
+  }, [user, router]);
 
-  // Handle Email sign-in or sign-up
+  // Handle Email sign-in
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setErrorMessage("");
-    setSuccessMessage("");
-  
     try {
-      // Fetch sign-in methods for the email
-      const signInMethods = await fetchSignInMethodsForEmail(auth, email);
-      console.log("signinMethods:", signInMethods);
-      
-      if (signInMethods.includes(SignInMethod.GOOGLE)) {
-        // If linked to Google, prompt to sign in with Google
-        setErrorMessage("This email is already linked to a Google account. Please sign in with Google.");
-      } else if (signInMethods.length > 0) {
-        // User exists, attempt to sign in
-        await signInUser(email, password);
-        setSuccessMessage("Login successful!");
-        router.push('/menu'); // Redirect only after successful sign-in
-      } else {
-        // No sign-in methods found, create a new user
-        const userCredential = await createUser(email, password);
-        await storeUserData(userCredential?.user);
-        setSuccessMessage("Account created successfully!");
-        router.push('/menu'); // Redirect after account creation
+      const response = await fetch("/api/users/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to sign in');
       }
+      const data = await response.json();
+      console.log(data);
     } catch (error: any) {
-      handleError(error); // Handle errors
+      console.error("Error signing in:", error);
+      setErrorMessage(error.message);
+      setTimeout(()=>setErrorMessage(""), 5000);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleError = (error: any) => {
-    const messages: Record<string, string> = {
-      'auth/invalid-email': "Invalid email format.",
-      'auth/user-not-found': "No account found with this email.",
-      'auth/wrong-password': "Incorrect password.",
-      'auth/email-already-in-use': "Email is already registered.",
-      'auth/operation-not-allowed': "Operation not allowed. Please use a different sign-in method.",
-    };
-
-    if (error.code === 'auth/wrong-password') {
-      setErrorMessage("Incorrect password.");
-    } else {
-      setErrorMessage(messages[error.code] || ` ${error.message}`);
-    }
-
-    setTimeout(() => setErrorMessage(""), 3000);
-  };
-
   return (
     <div className="bg-white py-24 p-4 flex justify-center items-center min-h-screen">
-      <div className="glassmorphism max-w-96 flex flex-col gap-4 font-rubik">
+      <div className="glassmorphism_login max-w-96 flex flex-col gap-4 font-rubik">
         <h2 className="text-3xl font-bold mb-2">Login</h2>
 
         <form onSubmit={handleEmailSignIn}>
@@ -145,30 +102,6 @@ const Login = () => {
             )}
           </button>
         </form>
-
-        <div className="text-center">
-          <p className="mb-2 font-medium uppercase">or</p>
-          <button 
-            onClick={handleGoogleSignIn} 
-            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] hover:border-primary_color"
-            disabled={isGoogleSignInLoading}
-          >
-            {isGoogleSignInLoading ? (
-              <Spinner otherStyles={""} />
-            ) : (
-              <div className="flex items-center justify-center">
-                <Image
-                  src={"/assets/images/google-icon.jpg"}
-                  alt="Google Icon"
-                  width={20}
-                  height={20}
-                  className="left-8 absolute"
-                />
-                <h1 className="mx-auto">Google</h1>
-              </div>
-            )}
-          </button>
-        </div>
 
         {errorMessage && (
           <p className="w-full p-2 mt-2 text-sm text-red-500 text-center bg-red-300 border-red-500 border-[1px] rounded-2xl">

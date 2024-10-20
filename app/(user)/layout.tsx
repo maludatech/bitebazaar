@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import "../globals.css";
 import CartIcon from "@/components/CartIcon";
+import { AuthContextProvider } from "@/context/AuthContext";
 
 // Local fonts
 const geistSans = localFont({
@@ -36,6 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <AuthContextProvider>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Navbar />
@@ -45,5 +47,6 @@ export default function RootLayout({
           </div>
         </body>
       </html>
+    </AuthContextProvider>
   );
 }
