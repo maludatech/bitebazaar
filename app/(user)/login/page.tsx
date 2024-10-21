@@ -3,36 +3,40 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import Image from 'next/image';
 import Cookies from 'js-cookie';
 import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Spinner } from '@/components/Spinner';
 import { useAuthContext } from '@/context/AuthContext';
 
-
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isGoogleSignInLoading, setIsGoogleSignInLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [successMessage, setSuccessMessage] = useState<string>("");
 
   const router = useRouter();
-  const {user, dispatch} = useAuthContext();
+  const { user, dispatch } = useAuthContext();
 
   useEffect(() => {
     const isLoggedIn = Cookies.get('isLoggedIn');
     if (user && isLoggedIn) {
-    router.push('/menu');
+      router.push('/menu');
     }
   }, [user, router]);
 
   // Handle Email sign-in
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate password and confirm password
+    if (password.length < 8) {
+      setErrorMessage("Password must be at least 8 characters long.");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await fetch("/api/users/login", {
@@ -53,7 +57,7 @@ const Login = () => {
     } catch (error: any) {
       console.error("Error signing in:", error);
       setErrorMessage(error.message);
-      setTimeout(()=>setErrorMessage(""), 5000);
+      setTimeout(() => setErrorMessage(""), 5000);
     } finally {
       setIsLoading(false);
     }
@@ -61,8 +65,8 @@ const Login = () => {
 
   return (
     <div className="bg-white py-24 p-4 flex justify-center items-center min-h-screen">
-      <div className="glassmorphism_login max-w-96 flex flex-col gap-4 font-rubik">
-        <h2 className="text-3xl font-bold mb-2">Login</h2>
+      <div className="glassmorphism_login body-container w-full lg:max-w-[36rem] flex flex-col gap-4 font-rubik">
+        <h2 className="text-3xl font-bold mb-2 text-primary_color">Login</h2>
 
         <form onSubmit={handleEmailSignIn}>
           <input 
@@ -97,7 +101,7 @@ const Login = () => {
             ) : (
               <div className="flex items-center justify-center">
                 <IonIcon icon={mailOutline} className="size-5 text-primary_color absolute left-4" />
-                <h1 className="mx-auto">Continue with Email</h1>
+                <h1 className="mx-auto text-primary_color">Login with Email</h1>
               </div>
             )}
           </button>
@@ -115,14 +119,8 @@ const Login = () => {
           </p>
         )}
 
-        <div className="text-center justify-center mt-2 text-[13px] flex flex-col gap-1 text-slate-500">
-          <p>By creating an account, you automatically accept our</p>
-          <p>
-            <Link href="/terms-of-service" className="underline hover:underline-offset-2">Terms of Service</Link>, 
-            <Link href="/privacy-policy" className="underline hover:underline-offset-2 px-1">Privacy Policy</Link>, 
-            and 
-            <Link href="/cookies-policy" className="underline hover:underline-offset-2 pl-1">Cookies Policy</Link>
-          </p>
+        <div className="text-center justify-center mt-2 text-sm flex flex-col gap-1 text-slate-500">
+          <Link href={"/forgotten-password"} className='underline hover:underline-offset-4'>Forgotten Password</Link>
         </div>
       </div>
     </div>

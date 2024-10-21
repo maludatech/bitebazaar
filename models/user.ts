@@ -12,6 +12,18 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Password is required"],
     },
+    fullName: {
+      type: String,
+      required: [true, "Fullname is required"],
+    },
+    phoneNumber: {
+      type: String,
+      required: [true, "Phone number is required"],
+    },
+    billingAddress: {
+      type: String,
+      required: [true, "Address is required"],
+    },
     resetToken: {
       type: String,
       required: false,

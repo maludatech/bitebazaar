@@ -42,8 +42,11 @@ export const authReducer = (state: { user: User | null }, action: AuthAction) =>
 
 // Initializer function to retrieve user from localStorage
 const getInitialUserState = () => {
-    const user = localStorage.getItem("user");
-    return user ? JSON.parse(user) : null;
+    if (typeof window !== "undefined") {
+        const user = localStorage.getItem("user");
+        return user ? JSON.parse(user) : null;
+    }
+    return null;
 }
 
 // Define the context provider
@@ -55,10 +58,12 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user") || 'null'); // Safeguard for null case
+        if (typeof window !== "undefined") {
+            const user = JSON.parse(localStorage.getItem("user") || 'null');
 
-        if (user) {
-            dispatch({ type: "LOGIN", payload: user });
+            if (user) {
+                dispatch({ type: "LOGIN", payload: user });
+            }
         }
     }, []);
 

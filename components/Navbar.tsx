@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IonIcon } from "@ionic/react";
 import { closeOutline, reorderThreeOutline } from "ionicons/icons";
-import { faUser, faBurger, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import { faBurger, faRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { useAuthContext } from "@/context/AuthContext";
 
 const Navbar = () => {
@@ -49,12 +49,16 @@ const Navbar = () => {
                 <Link href={"/contact"} className="hover:underline transition ease-in-out duration-300" onClick={() => setToggleDropDown(false)}>CONTACT</Link>
                 <Link href={"/find-us"} className="hover:underline transition ease-in-out duration-300" onClick={() => setToggleDropDown(false)}>FIND US</Link>
                 {!user ? (
-                  <Link href={"/login"} className="flex w-fit sm:hidden items-center gap-1 font-bold rounded-lg p-3 px-5 bg-secondary_color text-black hover:opacity-90" onClick={()=>setToggleDropDown(false)}>
-                    <FontAwesomeIcon icon={faUser} />
-                    Login
-                  </Link>
+                  <div className="flex flex-col gap-4 text-primary_color">
+                    <Link href={"/login"} className="flex w-full sm:hidden items-center justify-center gap-1 font-[550] rounded-lg p-2 bg-secondary_color hover:opacity-90" onClick={()=>setToggleDropDown(false)}>
+                      Login
+                    </Link>
+                    <Link href={"/register"} className="flex w-full sm:hidden items-center justify-center gap-1 font-[550] rounded-lg p-2 bg-secondary_color hover:opacity-90" onClick={()=>setToggleDropDown(false)}>
+                      Register
+                    </Link>
+                  </div>
                 ):(
-                  <button className="flex sm:hidden w-fit items-center gap-1 font-bold rounded-lg p-3 px-5 bg-secondary_color text-black hover:opacity-90" onClick={()=>{setToggleDropDown(false); signOutUser()}}>
+                  <button className="flex w-full sm:hidden items-center justify-center gap-1 font-[550] rounded-lg p-2 text-primary_color bg-secondary_color hover:opacity-90" onClick={()=>{setToggleDropDown(false); signOutUser()}}>
                     <FontAwesomeIcon icon={faRightFromBracket} />
                     Logout
                   </button>
@@ -66,15 +70,19 @@ const Navbar = () => {
 
         {/* Desktop Login Button */}
         {user ? (
-          <button onClick={() => signOutUser()} className={`hidden lg:flex items-center gap-1 font-bold rounded-lg py-1 px-3 bg-secondary_color hover:opacity-90`}>
+          <button onClick={() => signOutUser()} className={`hidden lg:flex items-center gap-1 font-bold rounded-lg py-1 px-3 text-primary_color bg-secondary_color hover:opacity-90`}>
             <FontAwesomeIcon icon={faRightFromBracket} />
             Logout
           </button>
         ) : (
-          <Link href={"/login"} className={`hidden lg:flex items-center gap-1 font-bold rounded-lg py-1 px-3 bg-secondary_color hover:opacity-90`}>
-            <FontAwesomeIcon icon={faUser} />
-            Login
+          <div className="items-center gap-4 hidden lg:flex text-primary_color">
+            <Link href={"/login"} className={`flex items-center gap-2 font-[550] rounded-lg p-2 bg-secondary_color hover:opacity-90`}>
+              Login
           </Link>
+          <Link href={"/register"} className={`flex items-center gap-2 font-[550] rounded-lg p-2 bg-secondary_color hover:opacity-90`}>
+              Register
+          </Link>
+          </div>   
         )}
       </div>
     </nav>
