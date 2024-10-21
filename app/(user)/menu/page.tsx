@@ -7,9 +7,11 @@ import Cookies from "js-cookie";
 import Footer from "@/components/Footer";
 import ProductList from "@/components/ProductList";
 import { useAuthContext } from "@/context/AuthContext";
+import { useCartContext } from "@/context/CartContext";
 
 const Menu = () => {
     const {user} = useAuthContext();
+    const { addToCart } = useCartContext();
     const router = useRouter();
 
     useEffect(() => {
@@ -34,7 +36,18 @@ const Menu = () => {
                         />
                         <h1 className="text-xl font-bold">{product.name}</h1>
                         <h4>NGN {product.price}</h4>
-                    <button className="p-3 bg-primary_color text-white rounded-md mt-2" onClick={()=>router.push(user? "/cart" : "/login")}>Add to Cart</button>
+                        <button 
+                            className="p-3 bg-primary_color text-white rounded-md mt-2" 
+                            onClick={() => addToCart({
+                                    id: product.id,
+                                    name: product.name,
+                                    price: product.price,
+                                    imageUrl: product.imageUrl,
+                                    quantity: 1,
+                                })}
+                        >
+                            Add to Cart
+                        </button>
                     </div>
                 ))}
             </div>

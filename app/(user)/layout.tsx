@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "../globals.css";
 import CartIcon from "@/components/CartIcon";
 import { AuthContextProvider } from "@/context/AuthContext";
+import { CartProvider } from "@/context/CartContext";
 
 // Local fonts
 const geistSans = localFont({
@@ -37,16 +38,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AuthContextProvider>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <Navbar />
-          {children}
-          <div className="fixed right-7 bottom-16 ">
-            <CartIcon/>
-          </div>
-        </body>
-      </html>
-    </AuthContextProvider>
+    <CartProvider>
+      <AuthContextProvider>
+        <html lang="en">
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <Navbar />
+            {children}
+            <div className="fixed right-7 bottom-16 ">
+              <CartIcon/>
+            </div>
+          </body>
+        </html>
+      </AuthContextProvider>
+    </CartProvider>
   );
 }
