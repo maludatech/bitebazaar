@@ -6,7 +6,10 @@ import Cookies from "js-cookie";
 // Define the User interface
 interface User {
     userId: string;
+    fullName: string;
     email: string;
+    phoneNumber: string;
+    billingAddress: string;
     registrationDate: string;
 }
 

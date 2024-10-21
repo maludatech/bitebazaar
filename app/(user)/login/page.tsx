@@ -8,6 +8,25 @@ import { IonIcon } from '@ionic/react';
 import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Spinner } from '@/components/Spinner';
 import { useAuthContext } from '@/context/AuthContext';
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface User {
+  userId: string;
+  fullName: string;
+  email: string;
+  phoneNumber: string;
+  billingAddress: string;
+  registrationDate: string;
+  }
+
+  interface CustomJwtPayload extends JwtPayload {
+    userId: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    billingAddress: string;
+    registrationDate: string;
+  }
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -27,19 +46,28 @@ const Login = () => {
     }
   }, [user, router]);
 
-  // Handle Email sign-in
+  const decodeJwtToken = (token: string): CustomJwtPayload | null => {
+    try {
+        const decoded: CustomJwtPayload = jwtDecode(token);
+        return decoded;
+    } catch (error) {
+        console.error("Error decoding token: ", error);
+        return null;
+    }
+  };
+
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate password and confirm password
+  
+    // Validate password
     if (password.length < 8) {
       setErrorMessage("Password must be at least 8 characters long.");
       return;
     }
-
+  
     setIsLoading(true);
     try {
-      const response = await fetch("/api/users/login", {
+      const response = await fetch("/api/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -49,14 +77,35 @@ const Login = () => {
           password,
         }),
       });
+  
+      // Handle errors returned by the backend
+      const result = await response.json();
       if (!response.ok) {
-        throw new Error('Failed to sign in');
+        // Display the error message from the backend
+        setErrorMessage(result.message || 'Failed to sign in');
+        setTimeout(() => setErrorMessage(""), 5000);
+        return;
       }
-      const data = await response.json();
-      console.log(data);
+  
+      // If successful, handle login
+      const { token, registrationDate } = result;
+      const decodedToken: CustomJwtPayload | null = decodeJwtToken(token);
+      const user: User = {
+        userId: decodedToken?.userId || "", 
+        fullName: decodedToken?.fullName || "", 
+        email: decodedToken?.email || "", 
+        phoneNumber: decodedToken?.phoneNumber || "", 
+        billingAddress: decodedToken?.billingAddress || "", 
+        registrationDate,
+      };    
+  
+      dispatch({ type: "LOGIN", payload: user });
+      router.push("/menu");
+  
     } catch (error: any) {
-      console.error("Error signing in:", error);
-      setErrorMessage(error.message);
+      // Fallback error message in case of network or other issues
+      setErrorMessage("Something went wrong. Please try again.");
+      console.error("Error during sign-in:", error);
       setTimeout(() => setErrorMessage(""), 5000);
     } finally {
       setIsLoading(false);

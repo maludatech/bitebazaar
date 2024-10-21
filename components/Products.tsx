@@ -1,6 +1,8 @@
+"use client"
+
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-
+import { useAuthContext } from "@/context/AuthContext";
 interface HotFood {
     imageUrl: string;
     foodName: string;
@@ -10,6 +12,7 @@ interface HotFood {
 
 const Products = () => {
     const router = useRouter();
+    const {user} = useAuthContext();
 
     const hotFoods: HotFood[] = [
         {
@@ -61,7 +64,7 @@ const Products = () => {
                             alt="products_img"
                             className="pt-4"
                         />
-                        <button className="p-4 bg-secondary_color text-primary_color rounded-lg font-bold uppercase hover:bg-opacity-85 transition duration-300 ease-in-out" onClick={()=>router.push("/menu")}>Order Now</button>
+                        <button className="p-4 bg-secondary_color text-primary_color rounded-lg font-bold uppercase hover:bg-opacity-85 transition duration-300 ease-in-out" onClick={()=>router.push(user ? "/menu" : "/login")}>Order Now</button>
                         <h1 className="text-3xl font-bold text-white pt-4">{food.foodName}</h1>
                         <p className="text-center pt-2 text-gray-300 uppercase font-semibold">{food.description}</p>
                     </div>

@@ -4,8 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
 export const POST = async(req: Request, res: Response) =>{
-    const form = await req.json();
-    const {email, password} = form;
+    const {email, password} = await req.json();
 
     try{
         await connectToDb();
