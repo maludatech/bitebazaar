@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useCartContext } from "@/context/CartContext";
 import { IonIcon } from "@ionic/react";
@@ -20,8 +20,8 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black text-white font-rubik bg-opacity-80 z-50 px-2 sm:px-8 lg:px-12">
-            <div className="glassmorphism_cart body-container w-full sm:max-w-[36rem] flex flex-col gap-2 overflow-y-auto">
-
+            <div className="glassmorphism_cart body-container w-full sm:max-w-[36rem] flex flex-col gap-2 overflow-y-auto max-h-screen"> {/* Added max-h-screen */}
+                
                 {/* Header with cart item count and close button */}
                 <div className="bg-primary_color flex justify-between items-center text-lg uppercase p-3 rounded-t-lg">
                     <h2>Shopping Cart ({cart.length})</h2>
@@ -36,43 +36,45 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                 ) : (
                     <>
                         {/* Cart items */}
-                        {cart.map((product) => (
-                            <div key={product.id} className="flex justify-between gap-3 px-4 pt-2 items-center group">
-                                <div className="bg-white text-black w-full flex items-center justify-between rounded-lg p-2">
-                                    
-                                    {/* Product Image */}
-                                    <div className="flex h-full w-full relative">
-                                        <Image
-                                            src={product.imageUrl}
-                                            width={120}
-                                            height={120}
-                                            alt={product.name}
-                                            className="object-contain"
-                                        />
+                        <div className="overflow-y-auto max-h-[25vh]"> {/* Added scrolling for cart items */}
+                            {cart.map((product) => (
+                                <div key={product.id} className="flex justify-between gap-3 px-4 pt-2 items-center group">
+                                    <div className="bg-white text-black w-full flex items-center justify-between rounded-lg p-2">
+                                        
+                                        {/* Product Image */}
+                                        <div className="flex h-full w-full relative">
+                                            <Image
+                                                src={product.imageUrl}
+                                                width={120}
+                                                height={120}
+                                                alt={product.name}
+                                                className="object-contain"
+                                            />
+                                        </div>
+
+                                        {/* Product Details */}
+                                        <div className="flex flex-col gap-1 w-full">
+                                            <h3 className="font-bold text-[15px]">{product.name}</h3>
+                                            <p className="text-[12px] font-[400]">NGN {product.price}.00</p>
+                                        </div>
+
+                                        {/* Quantity control */}
+                                        <div className="bg-[#eeeeee] flex justify-between items-center p-2 text-[12px] gap-4 font-[400] text-[#444] rounded-sm">
+                                            <h1 className="cursor-pointer" onClick={() => {
+                                                if (product.quantity > 1) {
+                                                    updateQuantity(product.id, product.quantity - 1);
+                                                }
+                                            }}>-</h1>
+                                            <h2>{product.quantity}</h2>
+                                            <h1 className="cursor-pointer" onClick={() => updateQuantity(product.id, product.quantity + 1)}>+</h1>
+                                        </div>
                                     </div>
 
-                                    {/* Product Details */}
-                                    <div className="flex flex-col gap-1 w-full">
-                                        <h3 className="font-bold text-[15px]">{product.name}</h3>
-                                        <p className="text-[12px] font-[400]">NGN {product.price}.00</p>
-                                    </div>
-
-                                    {/* Quantity control */}
-                                    <div className="bg-[#eeeeee] flex justify-between items-center p-2 text-[12px] gap-4 font-[400] text-[#444] rounded-sm">
-                                        <h1 className="cursor-pointer" onClick={() => {
-                                            if (product.quantity > 1) {
-                                                updateQuantity(product.id, product.quantity - 1);
-                                            }
-                                        }}>-</h1>
-                                        <h2>{product.quantity}</h2>
-                                        <h1 className="cursor-pointer" onClick={() => updateQuantity(product.id, product.quantity + 1)}>+</h1>
-                                    </div>
+                                    {/* Remove item button */}
+                                    <IonIcon icon={closeOutline} className="text-red-500 size-6 hover:cursor-pointer hidden group-hover:flex" onClick={() => removeFromCart(product.id)} />
                                 </div>
-
-                                {/* Remove item button */}
-                                <IonIcon icon={closeOutline} className="text-red-500 size-6 hover:cursor-pointer hidden group-hover:flex" onClick={() => removeFromCart(product.id)} />
-                            </div>
-                        ))}
+                            ))}
+                        </div>
 
                         {/* Subtotal and Total */}
                         <div className="flex flex-col px-4 pt-2">
@@ -87,8 +89,8 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
                             {/* Cart and Checkout buttons */}
                             <div className="flex gap-2 justify-between pt-4">
-                                <Link href={"/cart"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md">Cart</Link>
-                                <Link href={"/checkout"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md">Checkout</Link>
+                                <Link href={"/cart"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Cart</Link>
+                                <Link href={"/checkout"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Checkout</Link>
                             </div>
                         </div>
                     </>
