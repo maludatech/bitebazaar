@@ -5,7 +5,7 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 interface Product {
     id: string;
     name: string;
-    price: string;
+    price: number;
     quantity: number;
     imageUrl: string;
 }

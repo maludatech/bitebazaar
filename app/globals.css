@@ -21,6 +21,6 @@ body {
   @apply rounded-xl border border-gray-300 bg-white p-5 py-8 backdrop-blur;
 }
 .glassmorphism_cart{
-  @apply rounded-xl bg-green-900 backdrop-blur;
+  @apply rounded-lg bg-green-900 backdrop-blur;
 }
 
