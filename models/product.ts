@@ -20,6 +20,10 @@ const productSchema = new Schema({
     required: [true, "Price is required"],
     set: formatPrice,
   },
+  quantity:{
+    type: Number,
+    required: [true, "Quantity is required"]
+  }
 }, {
   timestamps: true
 });

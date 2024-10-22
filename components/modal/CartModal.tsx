@@ -30,8 +30,11 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
                 {/* Cart content */}
                 {cart.length === 0 ? (
-                    <div className="flex flex-col py-6 justify-center items-center">
-                        <p className="text-lg">There are no products in the cart!</p>
+                    <div className="flex flex-col py-6 gap-8 justify-center items-center">
+                        <p className="text-lg">There are no products in the cart😣!</p>
+                        <Link href={"/menu"} onClick={onClose} className="uppercase underline hover:underline-offset-2">
+                            Continue Shopping
+                        </Link>
                     </div>
                 ) : (
                     <>
@@ -88,20 +91,13 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
                             </div>
 
                             {/* Cart and Checkout buttons */}
-                            <div className="flex gap-2 justify-between pt-4">
-                                <Link href={"/cart"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Cart</Link>
-                                <Link href={"/checkout"} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Checkout</Link>
+                            <div className="flex gap-2 justify-between py-4">
+                                <Link href={"/menu"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Continue shopping</Link>
+                                <Link href={"/checkout"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Checkout</Link>
                             </div>
                         </div>
                     </>
                 )}
-
-                {/* Continue shopping link */}
-                <div className="flex flex-col pb-3 justify-center items-center">
-                    <Link href={"/menu"} onClick={onClose} className="uppercase underline hover:underline-offset-2">
-                        Continue Shopping
-                    </Link>
-                </div>
             </div>
         </div>
     );

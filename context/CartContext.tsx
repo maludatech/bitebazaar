@@ -28,20 +28,20 @@ export const useCartContext = () => {
 };
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const [cart, setCart] = useState<Product[]>([]);
-
-    // Load cart from localStorage on component mount
-    useEffect(() => {
-        const storedCart = localStorage.getItem('cart');
-        if (storedCart) {
-            setCart(JSON.parse(storedCart));
+    // Lazy initialization of cart from localStorage
+    const [cart, setCart] = useState<Product[]>(() => {
+        if (typeof window !== 'undefined') {
+            const storedCart = localStorage.getItem('cart');
+            return storedCart ? JSON.parse(storedCart) : [];
         }
-    }, []);
+        return [];
+    });
 
     // Save cart to localStorage whenever the cart state changes
     useEffect(() => {
-        console.log('Cart updated:', cart);
-        localStorage.setItem('cart', JSON.stringify(cart));
+        if (cart.length > 0) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
     }, [cart]);
 
     const addToCart = (product: Product) => {
