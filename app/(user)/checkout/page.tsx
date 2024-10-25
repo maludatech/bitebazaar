@@ -23,10 +23,11 @@ const CheckOut = () => {
   const [selectedDelivery, setSelectedDelivery] = useState<keyof typeof deliveryFee | null>(null);
 
   const deliveryFee = {
-    "Lekki1": 2000,
-    "Lekki2":3000,
-    "mainland1": 3000,
-    "mainland2": 4000
+    "Local Pickup": 0,
+    "Lekki1 - (Chevron, Ikoyi, Lagos Island)": 2000,
+    "Lekki2 - (Ajah - Sangotedo)":3000,
+    "mainland1 - (Yaba, Surulere, Apapa)": 3000,
+    "mainland2 - (FESTAC, Ikeja, Ogba)": 4000
   };
 
   useEffect(() => {
@@ -38,6 +39,9 @@ const CheckOut = () => {
 
   // Calculate the subtotal by summing the price * quantity for each product
   const subtotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
+
+  // Calculate the total with delivery fee if selected
+  const total = selectedDelivery ? subtotal + deliveryFee[selectedDelivery] : subtotal;
 
   // Table columns definition
   const columns = useMemo<ColumnDef<CartItem>[]>(
@@ -75,7 +79,7 @@ const CheckOut = () => {
 
   return (
     <div className="pt-20 font-roboto">
-      <div className="body-container p-4 px-8 flex flex-col gap-6">
+      <div className="body-container py-6 px-8 flex flex-col gap-6">
         <h1 className="py-8 text-center font-bold text-5xl lg:text-6xl">CHECKOUT</h1>
 
         {/* Billing details section */}
@@ -175,10 +179,21 @@ const CheckOut = () => {
                 ))}
               </div>
             </div>
-              <div className="flex justify-between border-t-2 pt-5 text-[16px] font-bold px-4">
-                <h1 className="uppercase">Total:</h1>
-                <h1>NGN{subtotal * deliveryFee}.00</h1>
+              <div className="flex justify-between border-t-2 text-[16px] font-bold p-4 bg-slate-100">
+                <h1 className="uppercase">Total</h1>
+                <h1>NGN{total}.00</h1>
               </div>
+            </div>
+
+            {/* submit button and agreement */}
+            
+            <div className="flex flex-col gap-4 text-[#444444] text-[16px] sm:text-lg px-1">
+              <p>Your Personal data will be used to process your order, support your experience throughout this website and for other purposes described in our privacy policy.</p>
+              <div className="flex gap-3 sm:items-center">
+                <input type="checkbox" className="size-6" required/>
+                <p className="font-bold uppercase"> I have read and agree to the website terms and conditions <span className="text-red-500">*</span></p>
+              </div>
+              <button className="w-full p-4 bg-primary_color text-secondary_color rounded-md uppercase font-semibold">Place Order</button>
             </div>
 
           </div>

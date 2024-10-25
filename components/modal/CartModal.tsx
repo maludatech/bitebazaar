@@ -92,8 +92,8 @@ const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }
 
                             {/* Cart and Checkout buttons */}
                             <div className="flex gap-2 justify-between py-4">
-                                <Link href={"/menu"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Continue shopping</Link>
-                                <Link href={"/checkout"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90">Checkout</Link>
+                                <Link href={"/menu"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90 text-sm">Continue shopping</Link>
+                                <Link href={"/checkout"} onClick={onClose} className="uppercase bg-white text-primary_color p-3 w-full text-center font-semibold rounded-md hover:opacity-90 text-sm">Checkout</Link>
                             </div>
                         </div>
                     </>

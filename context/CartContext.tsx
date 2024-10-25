@@ -12,6 +12,8 @@ interface Product {
 
 interface CartContextType {
     cart: Product[];
+    deliveryFee: number;
+    setDeliveryFee: (fee: number) => void;
     addToCart: (product: Product) => void;
     removeFromCart: (id: string) => void;
     updateQuantity: (id: string, quantity: number) => void;
@@ -36,6 +38,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         }
         return [];
     });
+    const [deliveryFee, setDeliveryFee] = useState(0);
 
     // Save cart to localStorage whenever the cart state changes
     useEffect(() => {
@@ -69,7 +72,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity }}>
+        <CartContext.Provider value={{ cart, deliveryFee, addToCart, removeFromCart, updateQuantity, setDeliveryFee }}>
             {children}
         </CartContext.Provider>
     );
