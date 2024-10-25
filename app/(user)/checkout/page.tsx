@@ -8,7 +8,6 @@ import { useAuthContext } from "@/context/AuthContext";
 import { useCartContext } from "@/context/CartContext";
 import Footer from "@/components/Footer";
 
-
 interface CartItem {
   id: string;
   name: string;
@@ -24,9 +23,9 @@ const CheckOut = () => {
   useEffect(() => {
     const isLoggedIn = Cookies.get('isLoggedIn');
     if (!user && !isLoggedIn) {
-    router.push('/login');
+      router.push('/login');
     }
-}, [user, router]);
+  }, [user, router]);
 
   // Table columns definition
   const columns = useMemo<ColumnDef<CartItem>[]>(
@@ -64,31 +63,39 @@ const CheckOut = () => {
 
   return (
     <div className="pt-20 font-roboto">
-      <div className="body-container p-4 flex flex-col gap-6">
+      <div className="body-container p-4 px-8 flex flex-col gap-6">
         <h1 className="py-8 text-center font-bold text-5xl lg:text-6xl">CHECKOUT</h1>
 
         {/* Billing details section */}
-        <div className="flex flex-col gap-12 sm:gap-6 sm:flex-row">
+        <div className="flex flex-col gap-10 sm:flex-row">
           <div className="flex flex-col gap-2 text-[#444444] w-full">
             <h1 className="font-medium text-3xl leading-8 pb-8">Billing details</h1>
             <div className="flex flex-col gap-2 w-full">
-              <label className="text-lg uppercase">Full Name <span className="text-red-600">*</span></label>
+              <label className="text-lg uppercase">
+                Full Name <span className="text-red-600">*</span>
+              </label>
               <input
                 className="bg-[#f9f9f9] p-3 text-lg text-[#1c2123] border-[1px] border-[#e1e1e1] w-full mb-3"
                 value={user?.fullName}
                 readOnly
               />
-              <label className="text-lg uppercase">Billing Address <span className="text-red-600">*</span></label>
+              <label className="text-lg uppercase">
+                Billing Address <span className="text-red-600">*</span>
+              </label>
               <input
                 className="bg-[#f9f9f9] p-3 text-lg text-[#1c2123] border-[1px] border-[#e1e1e1] w-full mb-3"
                 value={user?.billingAddress}
               />
-              <label className="text-lg uppercase">Phone Number <span className="text-red-600">*</span></label>
+              <label className="text-lg uppercase">
+                Phone Number <span className="text-red-600">*</span>
+              </label>
               <input
                 className="bg-[#f9f9f9] p-3 text-lg text-[#1c2123] border-[1px] border-[#e1e1e1] w-full mb-3"
                 value={user?.phoneNumber}
               />
-              <label className="text-lg uppercase">Email Address <span className="text-red-600">*</span></label>
+              <label className="text-lg uppercase">
+                Email Address <span className="text-red-600">*</span>
+              </label>
               <input
                 className="bg-[#f9f9f9] p-3 text-lg text-[#1c2123] border-[1px] border-[#e1e1e1] w-full mb-3"
                 value={user?.email}
@@ -98,24 +105,19 @@ const CheckOut = () => {
           </div>
 
           {/* Product and Subtotal Table */}
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full sm:pt-12">
             <div className="border-[1px] w-full p-4 border-[#e1e1e1]">
               <h1 className="font-bold text-3xl pb-4">Order Summary</h1>
-              <table className="min-w-full border-collapse">
+              <table className="w-full border-collapse">
                 <thead>
                   <tr className="bg-gray-100 border-b">
-                    {table.getHeaderGroups().map((headerGroup) => (
-                      <tr key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => (
-                          <th
-                            key={header.id}
-                            className="text-left p-2 font-semibold"
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                          </th>
-                        ))}
-                      </tr>
-                    ))}
+                    {table.getHeaderGroups().map((headerGroup) =>
+                      headerGroup.headers.map((header) => (
+                        <th key={header.id} className="text-left p-2 font-semibold">
+                          {flexRender(header.column.columnDef.header, header.getContext())}
+                        </th>
+                      ))
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -136,10 +138,11 @@ const CheckOut = () => {
 
         {/* Shipping section */}
         <div className="flex flex-col gap-4">
-          <div className="border-[1px] w-full p-2 border-[#e1e1e1] flex justify-between">
+          <div className="border-[1px] w-full p-4 border-[#e1e1e1] flex items-center justify-between">
             <h1 className="font-bold text-xl">Shipping</h1>
-            <div>
-              <h1>Local pickup</h1>
+            <div className="flex items-center">
+              <input type="radio" id="local-pickup" name="shipping" className="mr-2" />
+              <label htmlFor="local-pickup">Local pickup</label>
             </div>
           </div>
         </div>
