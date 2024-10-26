@@ -1,16 +1,18 @@
 "use client";
 
 import { useCartContext } from "@/context/CartContext";
+import { useAuthContext } from "@/context/AuthContext";
 import { IonIcon } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
 import Image from "next/image";
 import Link from "next/link";
 
 const CartModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+    const { user } = useAuthContext();
     const { cart, removeFromCart, updateQuantity } = useCartContext();
 
     // Return null if modal is not open
-    if (!isOpen) return null;
+    if (!isOpen || !user) return null;
 
     // Calculate the subtotal by summing the price * quantity for each product
     const subtotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);

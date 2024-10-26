@@ -4,11 +4,14 @@ import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import CartModal from "./modal/CartModal";
-import { useCartContext } from "@/context/CartContext"; // Import CartContext
+import { useCartContext } from "@/context/CartContext";
+import { useAuthContext } from "@/context/AuthContext";
 
 const CartIcon = () => {
+    const { cart } = useCartContext();
+    const { user } = useAuthContext();
+
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { cart } = useCartContext(); // Access cart items
     const productNumber = cart.length;
 
     return (
@@ -18,7 +21,7 @@ const CartIcon = () => {
                 onClick={() => setIsModalOpen(true)}
             >
                 <div className="absolute -top-3 -right-3 rounded-full bg-[#dd2222] w-[30px] h-[30px] text-center flex justify-center items-center text-xs text-white">
-                    <h1>{productNumber}</h1>
+                    <h1>{user ? productNumber : 0}</h1>
                 </div>
                 <FontAwesomeIcon icon={faCartShopping} className="text-primary_color size-6" />
             </div>
