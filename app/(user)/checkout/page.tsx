@@ -17,7 +17,7 @@ interface CartItem {
 
 const CheckOut = () => {
   const { user } = useAuthContext();
-  const { cart } = useCartContext();
+  const { cart, setDeliveryFee } = useCartContext();
   const router = useRouter();
 
   const [selectedDelivery, setSelectedDelivery] = useState<keyof typeof deliveryFee | null>(null);
