@@ -5,10 +5,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export async function POST(request: NextRequest) {
     try {
-        const { total } = await request.json();
+        const { totalInKobo } = await request.json();
 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: total,
+            amount: totalInKobo,
             currency: "ngn",
             automatic_payment_methods: { enabled: true },
         });
@@ -19,3 +19,4 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: `Internal Server Error ${error}` }, { status: 500 });
     }
 }
+

@@ -17,7 +17,7 @@ interface CartItem {
   quantity: number;
 }
 
-const CheckOut = () => {
+const Payment = () => {
   const { user } = useAuthContext();
   const { cart, deliveryFee } = useCartContext();
   const router = useRouter();
@@ -38,18 +38,26 @@ const CheckOut = () => {
     // Calculate the total with delivery fee if selected
     const total = subtotal + deliveryFee;
 
+    // Convert to Kobo and ensure it's at least 50 Kobo (Stripe's minimum)
+    const totalInKobo = Math.max(total * 100, 50);
+
+    const currentDate = new Intl.DateTimeFormat('en-GB').format(new Date());
+
   return (
     <div className="pt-20 font-roboto">
-      <div className="body-container py-6 px-8 flex flex-col gap-6">
-        <div className="flex flex-col gap-3">
-          <h1 className="font-bold text-lg">Total: NGN{total}.00</h1>
+      <div className="body-container py-6 px-8 flex flex-col gap-6 z-20">
+        <h1 className="py-4 text-center font-bold text-5xl lg:text-6xl">PAYMENT</h1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:gap-8 sm:justify-center text-[16px] w-full text-[#444444] pb-4">
+          <h1>Total: <span className="font-semibold">NGN{total}.00</span></h1>
+          <h1>Date: <span className="font-semibold">{currentDate}</span></h1>
+          <h1>Payment Method: <span className="font-semibold">Stripe Payment Gateway</span></h1>
         </div>
         <Elements stripe={stripePromise} options={{
           mode: "payment",
-          amount: total,
+          amount: totalInKobo,
           currency: "ngn"
         }}>
-          <CheckoutForm total={total}/>
+          <CheckoutForm totalInKobo={totalInKobo}/>
         </Elements>
       </div>
       <Footer />
@@ -57,4 +65,4 @@ const CheckOut = () => {
   );
 };
 
-export default CheckOut;
+export default Payment ;
