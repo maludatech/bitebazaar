@@ -21,6 +21,7 @@ const CheckOut = () => {
   const router = useRouter();
 
   const [selectedDelivery, setSelectedDelivery] = useState<keyof typeof deliveryFee | null>(null);
+  const [isChecked, setIsChecked] = useState(false);
 
   const deliveryFee = {
     "Local Pickup": 0,
@@ -36,6 +37,13 @@ const CheckOut = () => {
       router.push('/login');
     }
   }, [user, router]);
+
+    // Update delivery fee in context when selectedDelivery changes
+    useEffect(() => {
+      if (selectedDelivery) {
+        setDeliveryFee(deliveryFee[selectedDelivery]);
+      }
+    }, [selectedDelivery, setDeliveryFee, deliveryFee]);
 
   // Calculate the subtotal by summing the price * quantity for each product
   const subtotal = cart.reduce((acc, product) => acc + product.price * product.quantity, 0);
@@ -190,10 +198,10 @@ const CheckOut = () => {
             <div className="flex flex-col gap-4 text-[#444444] text-[16px] sm:text-lg px-1">
               <p>Your Personal data will be used to process your order, support your experience throughout this website and for other purposes described in our privacy policy.</p>
               <div className="flex gap-3 sm:items-center">
-                <input type="checkbox" className="size-6" required/>
+                <input type="checkbox" className="size-6 hover:cursor-pointer" required  onChange={() => setIsChecked(!isChecked)}/>
                 <p className="font-bold uppercase"> I have read and agree to the website terms and conditions <span className="text-red-500">*</span></p>
               </div>
-              <button className="w-full p-4 bg-primary_color text-secondary_color rounded-md uppercase font-semibold">Place Order</button>
+              <button className={`w-full p-4 bg-primary_color hover:opacity-90 hover:cursor-pointer text-secondary_color rounded-md uppercase font-semibold ${!isChecked && "hover:cursor-not-allowed"}`} disabled={!isChecked} onClick={()=>router.push("/checkout/payment")}>Place Order</button>
             </div>
 
           </div>
