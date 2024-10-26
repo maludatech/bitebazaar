@@ -46,10 +46,10 @@ const Contact = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`/api/user/support/${userId}`, {
+            const response = await fetch(`/api/user/contact/${userId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(form),
+                body: JSON.stringify({form}),
             });
 
             if (!response.ok) {
@@ -90,13 +90,13 @@ const Contact = () => {
                 </div>
                 
                 {errorMessage && (
-                    <p className="w-full p-2 mt-2 text-sm text-red-500 text-center bg-red-300 border-red-500 border-[1px] rounded-2xl">
+                    <p className="w-full p-2 mt-2 text-sm text-red-500 text-center bg-red-300 border-red-500 border-[1px] rounded-md">
                     {errorMessage}
                     </p>
                 )}
 
                 {!errorMessage && successMessage && (
-                    <p className="w-full p-2 text-sm mt-2 text-center text-blue-500 bg-blue-300 border-blue-500 border-[1px] rounded-2xl">
+                    <p className="w-full p-2 text-sm mt-2 text-center text-blue-500 bg-blue-300 border-blue-500 border-[1px] rounded-md">
                         {successMessage}
                     </p>
                 )}
