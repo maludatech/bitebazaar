@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
 import { IonIcon } from '@ionic/react';
-import { mailOutline, eyeOffOutline, eyeOutline } from 'ionicons/icons';
+import { eyeOffOutline, eyeOutline } from 'ionicons/icons';
 import { Spinner } from '@/components/Spinner';
 import { useAuthContext } from '@/context/AuthContext';
 import { jwtDecode, JwtPayload } from "jwt-decode";
@@ -143,15 +143,12 @@ const Login = () => {
           </div>
           <button 
             type="submit" 
-            className="w-full flex items-center justify-center font-bold text-black p-3 rounded-full border-slate-400 border-[1px] relative hover:border-primary_color"
+            className="w-full flex items-center justify-center font-bold text-secondary_color p-3 rounded-full bg-primary_color relative hover:opacity-90"
           >
             {isLoading ? (
               <Spinner otherStyles={""} />
             ) : (
-              <div className="flex items-center justify-center">
-                <IonIcon icon={mailOutline} className="size-5 text-primary_color absolute left-4" />
-                <h1 className="mx-auto text-primary_color">Login with Email</h1>
-              </div>
+                <h1 className="mx-auto">Login with Email</h1>
             )}
           </button>
         </form>
