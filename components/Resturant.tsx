@@ -31,7 +31,7 @@ const Restaurant = () => {
           <p className="text-lg pt-10">
             This is truly the best beef burger available! The beef patties are healthy, loaded with fresh herbs, and full of flavor with the perfect blend of seasonings.
           </p>
-          <Link href={"/shop"} className="mt-10 bg-primary_color py-3 px-6 rounded-md w-fit self-center text-white hover:opacity-90 transition duration-300 ease-in-out">View Menu</Link>
+          <Link href={"/menu"} className="mt-10 bg-primary_color py-3 px-6 rounded-md w-fit self-center text-white hover:opacity-90 transition duration-300 ease-in-out">View Menu</Link>
         </div>
       </div>
       <div className="flex flex-col sm:flex-row">
@@ -50,7 +50,7 @@ const Restaurant = () => {
           <p className="text-lg pt-10">
                 Its delicate flesh is surprisingly tender, with a hint of gaminess that adds depth and complexity to each bite. And when roasted to perfection, the skin develops a crispy, irresistible crunch that makes it a culinary delight. This extravagant smoked guinea fowl recipe is a dinner party dish to show off with.
           </p>
-          <Link href={"/shop"} className="mt-10 bg-primary_color py-3 px-6 rounded-md w-fit self-center text-white hover:opacity-90 transition duration-300 ease-in-out">View Menu</Link>
+          <Link href={"/menu"} className="mt-10 bg-primary_color py-3 px-6 rounded-md w-fit self-center text-white hover:opacity-90 transition duration-300 ease-in-out">View Menu</Link>
         </div>
         <div className="h-full w-full sm:w-1/2">
         <div
