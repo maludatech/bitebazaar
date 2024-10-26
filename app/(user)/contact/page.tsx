@@ -95,7 +95,7 @@ const Contact = () => {
                     </p>
                 )}
 
-                {successMessage && (
+                {!errorMessage && successMessage && (
                     <p className="w-full p-2 text-sm mt-2 text-center text-blue-500 bg-blue-300 border-blue-500 border-[1px] rounded-2xl">
                         {successMessage}
                     </p>
