@@ -22,9 +22,9 @@ const Menu = () => {
     }, [user, router]);
 
   return (
-    <div className="pt-20 font-lato">
+    <div className="pt-20 font-rubik">
         <div className="body-container flex flex-col gap-4">
-            <h1 className="py-8 text-center font-bold text-4xl lg:text-5xl">SHOP</h1>
+            <h1 className="py-8 text-center font-bold text-4xl lg:text-5xl font-lato">SHOP</h1>
             <div className="flex flex-col sm:grid sm:grid-cols-2 lg:grid-cols-3">
                 {ProductList.map((product, index)=>(
                     <div key={index} className="flex flex-col gap-2 items-center justify-center pb-6 text-[#444444]">
