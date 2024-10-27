@@ -44,7 +44,7 @@ export default function RootLayout({
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
             <Navbar />
             {children}
-            <div className="fixed right-7 bottom-16 ">
+            <div className="fixed right-7 bottom-16 z-50">
               <CartIcon/>
             </div>
           </body>

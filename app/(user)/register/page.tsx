@@ -250,8 +250,8 @@ const Register = () => {
           <p>By creating an account, you automatically accept our</p>
           <p>
             <Link href="/terms-of-service" className="underline hover:underline-offset-2">Terms of Service</Link>,
-            <Link href="/privacy-policy" className="underline hover:underline-offset-2">Privacy Policy</Link>, and
-            <Link href="/cookie-policy" className="underline hover:underline-offset-2"> Cookie Policy</Link>.
+            <Link href="/privacy-policy" className="underline hover:underline-offset-2">Privacy Policy</Link>,&
+            <Link href="/cookie-policy" className="underline hover:underline-offset-2">Cookie Policy</Link>.
           </p>
         </div>
 

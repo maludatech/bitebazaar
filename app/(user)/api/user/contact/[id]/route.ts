@@ -40,7 +40,7 @@ export const POST = async(req: Request, { params }: {params: {id: string}}) => {
                     </div>
                         <p style="color: #333; font-size: 18px; font-weight: bold;">Hello Admin,</p>
                         <p style="color: #555; font-size: 16px; font-weight: bold;">${subject}</p>
-                        <p>You got a new message from ${user.username}:</p>
+                        <p>You got a new message from ${user.fullName}:</p>
                         <p style="padding: 12px; border-left: 4px solid #d0d0d0; font-style: italic;">
                             This user by full name: ${user.fullName} sent the message below:
                             <br/>
