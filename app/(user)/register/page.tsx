@@ -255,7 +255,7 @@ const Register = () => {
           </p>
         </div>
 
-        <div className="text-center justify-center mt-3 text-sm flex flex-col text-slate-500">
+        <div className="text-center justify-center text-sm flex flex-col text-slate-500">
           <p>Already have an account: <Link href={"/login"} className='underline hover:underline-offset-4'>Login</Link></p>
         </div>
       </div>

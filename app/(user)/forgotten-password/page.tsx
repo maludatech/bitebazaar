@@ -14,7 +14,7 @@ const ForgotPassword = () => {
   const [successMessage, setSuccessMessage] = useState<string>();
 
   const router = useRouter();
-  const { user, dispatch } = useAuthContext();
+  const { user } = useAuthContext();
 
   useEffect(() => {
     const isLoggedIn = Cookies.get('isLoggedIn');
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-        const response = await fetch("/api/forgot-password", {
+        const response = await fetch("/api/user/forgot-password", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -78,7 +78,7 @@ const ForgotPassword = () => {
             {isLoading ? (
               <Spinner otherStyles={""} />
             ) : (
-                <h1 className="mx-auto">Login with Email</h1>
+                <h1 className="mx-auto">Send</h1>
             )}
           </button>
         </form>
