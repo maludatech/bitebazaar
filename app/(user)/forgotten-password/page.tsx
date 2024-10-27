@@ -7,11 +7,11 @@ import { Spinner } from '@/components/Spinner';
 import { useAuthContext } from '@/context/AuthContext';
 
 
-const Login = () => {
+const ForgotPassword = () => {
   const [email, setEmail] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [successMessage, setSuccessMessage] = useState<string>();
 
   const router = useRouter();
   const { user, dispatch } = useAuthContext();
@@ -28,45 +28,41 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const response = await fetch("/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email
-        }),
-      });
+        const response = await fetch("/api/forgot-password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({email}),
+        });
   
-      // Handle errors returned by the backend
-      const result = await response.json();
-      if (!response.ok) {
-        // Display the error message from the backend
-        setErrorMessage(result.message || 'Failed to sign in');
-        setTimeout(() => setErrorMessage(""), 5000);
-        return;
+        const result = await response.json();
+        if (!response.ok) {
+          setErrorMessage(result.message || "An error occurred");
+          setTimeout(() => setErrorMessage(""), 3000);
+        } else {
+          setSuccessMessage(result.message || "Password reset email sent!");
+          setTimeout(() => setSuccessMessage(""), 3000);
+          router.replace("/restore-password");
+        }
+      } catch (error) {
+        setErrorMessage("An error occurred");
+        setTimeout(() => setErrorMessage(""), 3000);
+      } finally {
+        setIsLoading(false);
       }
-  
-      // If successful, handle login
-      const { token, registrationDate } = result;  
-      router.push("/menu");
-  
-    } catch (error: any) {
-      // Fallback error message in case of network or other issues
-      setErrorMessage("Something went wrong. Please try again.");
-      console.error("Error during sign-in:", error);
-      setTimeout(() => setErrorMessage(""), 5000);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
     <div className="bg-white py-24 p-4 flex justify-center items-center min-h-screen">
       <div className="glassmorphism_login body-container w-full lg:max-w-[36rem] flex flex-col gap-4 font-rubik">
-        <h2 className="text-3xl font-bold mb-2 text-primary_color">Login</h2>
+        <h2 className="text-3xl font-bold text-primary_color">Forgot Password</h2>
+        <h1 className="text-[13px] font-bold text-[#444444]">
+            Enter your email address, and we'll send you instructions on how to reset your password.
+            Please check your inbox for the email, and if you don't see it, be sure to look in your spam or junk folder.
+        </h1>
 
-        <form onSubmit={handleEmailSignIn}>
+        <form onSubmit={handleEmailSignIn} className='flex flex-col gap-2'>
           <input 
             type="email" 
             placeholder="Email" 
@@ -104,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;
