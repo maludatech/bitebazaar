@@ -2,7 +2,7 @@
 
 const TermsOfService = () => {
   return (
-    <div className="relative bg-white dark:bg-black text-black dark:text-white mx-auto px-4 py-28 sm:py-24 min-h-screen">
+    <div className="relative text-[#444444] font-roboto px-4 py-28 min-h-screen">
       {/* Background Image */}
       <div className="absolute inset-0 z-0 opacity-20 flex items-center justify-center">
         <img
