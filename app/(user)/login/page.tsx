@@ -165,8 +165,9 @@ const Login = () => {
           </p>
         )}
 
-        <div className="text-center justify-center mt-2 text-sm flex flex-col gap-1 text-slate-500">
+        <div className="text-center justify-center mt-4 text-[15px] flex flex-col gap-6 text-slate-500">
           <Link href={"/forgotten-password"} className='underline hover:underline-offset-4'>Forgotten Password</Link>
+          <p>Don't have an account: <Link href={"/register"} className='underline hover:underline-offset-4'>Create Account</Link></p>
         </div>
       </div>
     </div>

@@ -60,7 +60,7 @@ const Contact = () => {
 
             setSuccessMessage("Message sent successfully!!");
             setTimeout(() => setSuccessMessage(""), 5000);
-            router.push("/menu");
+            setTimeout(()=> router.push("/menu"), 5000);
         } catch (error) {
             console.error("Failed to send message", error);
             setErrorMessage("Failed to send message");

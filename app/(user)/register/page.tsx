@@ -251,8 +251,12 @@ const Register = () => {
           <p>
             <Link href="/terms-of-service" className="underline hover:underline-offset-2">Terms of Service</Link>,
             <Link href="/privacy-policy" className="underline hover:underline-offset-2">Privacy Policy</Link>, and
-            <Link href="/cookie-policy" className="underline hover:underline-offset-2">Cookie Policy</Link>.
+            <Link href="/cookie-policy" className="underline hover:underline-offset-2"> Cookie Policy</Link>.
           </p>
+        </div>
+
+        <div className="text-center justify-center mt-3 text-sm flex flex-col text-slate-500">
+          <p>Already have an account: <Link href={"/login"} className='underline hover:underline-offset-4'>Login</Link></p>
         </div>
       </div>
     </div>
