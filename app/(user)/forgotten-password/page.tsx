@@ -24,7 +24,7 @@ const ForgotPassword = () => {
   }, [user, router]);
 
 
-  const handleEmailSignIn = async (e: React.FormEvent) => {
+  const handleForgottenPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -62,7 +62,7 @@ const ForgotPassword = () => {
             Please check your inbox for the email, and if you don't see it, be sure to look in your spam or junk folder.
         </h1>
 
-        <form onSubmit={handleEmailSignIn} className='flex flex-col gap-2'>
+        <form onSubmit={handleForgottenPassword} className='flex flex-col gap-2'>
           <input 
             type="email" 
             placeholder="Email" 
