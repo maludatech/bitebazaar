@@ -20,7 +20,8 @@ const geistMono = localFont({
 // Use the Metadata API for proper metadata handling
 export const metadata = {
   title: "BiteBazaar",
-  description: "BiteBazaar is your ultimate destination for fresh and delicious meals delivered right to your doorstep.",
+  description:
+    "BiteBazaar is your ultimate destination for fresh and delicious meals delivered right to your doorstep.",
   icons: {
     icon: "/favicon.ico",
   },
@@ -41,11 +42,11 @@ export default function RootLayout({
     <CartProvider>
       <AuthContextProvider>
         <html lang="en">
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <body className={`antialiased`}>
             <Navbar />
             {children}
             <div className="fixed right-7 bottom-16 z-50">
-              <CartIcon/>
+              <CartIcon />
             </div>
           </body>
         </html>

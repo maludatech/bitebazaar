@@ -86,12 +86,12 @@ const FindUS = () => {
         </div>
 
         <div className=" bg-[#1C2123] h-full w-full flex items-center justify-center p-8">
-            <iframe loading="lazy"
-				src="https://maps.google.com/maps?q=Block%20114%20Plot%204%2C%20Akiogun%20street%2C%20Oniru%2C%20Victoria%20island%2C%20Lagos%20state&#038;t=m&#038;z=15&#038;output=embed&#038;iwloc=near"
-				title="Block 114 Plot 4, Akiogun street, Oniru, Victoria island, Lagos state"
-				aria-label="Block 114 Plot 4, Akiogun street, Oniru, Victoria island, Lagos state"
-                className="body-container w-full h-full min-h-[400px]"
-			></iframe>
+          <iframe loading="lazy"
+				    src="https://maps.google.com/maps?q=Block%20114%20Plot%204%2C%20Akiogun%20street%2C%20Oniru%2C%20Victoria%20island%2C%20Lagos%20state&#038;t=m&#038;z=15&#038;output=embed&#038;iwloc=near"
+				    title="Block 114 Plot 4, Akiogun street, Oniru, Victoria island, Lagos state"
+				    aria-label="Block 114 Plot 4, Akiogun street, Oniru, Victoria island, Lagos state"
+            className="body-container w-full h-full min-h-[400px]"
+			    ></iframe>
         </div>
       </div>
       <Services/>
