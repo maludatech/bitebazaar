@@ -49,7 +49,7 @@ export const metadata = {
     type: "website",
   },
   twitter: {
-    card: "Bitebazaar",
+    card: "summary_large_image",
     title: "Bitebazaar",
     description:
       "BiteBazaar is your ultimate destination for fresh and delicious meals delivered right to your doorstep.",
